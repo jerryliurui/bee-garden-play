@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>蜂行花园 · 采蜜冒险</title>
+  <style>
+    @font-face { font-family: GardenPlay; src: url(GardenPlay.ttf) format('truetype'); font-display: swap; }
+    * { box-sizing: border-box; }
+    html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#293f31; color:#293f31; font:15px/1.5 system-ui,sans-serif; }
+    main, .frame { position:fixed; inset:0; width:100%; height:100%; height:100dvh; overflow:hidden; }
+    canvas { display:block; width:100%; height:100%; touch-action:none; }
+    canvas:focus { outline:none; } canvas:focus-visible { outline:2px solid #9a6827; outline-offset:-2px; }
+    #fullscreen { display:none; }
+    #loading { position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; text-align: center; background: #f3efdb; }
+    #loading[hidden], #warning[hidden] { display: none; } progress { width: min(240px, 65vw); accent-color: #bc7a21; }
+    #warning { position:fixed; left:20px; right:20px; bottom:20px; padding:12px; background:#fff5dc; border-radius:9px; overflow-wrap:anywhere; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="frame" aria-label="游戏区域">
+      <canvas id="unity-canvas" width="960" height="600" tabindex="0" aria-label="蜂行花园游戏画面"></canvas>
+      <div id="loading" role="status"><span id="loading-text">正在准备花园…</span><progress id="progress" max="1" value="0" aria-label="加载进度"></progress><small>免费非商业试玩 · <a href="credits.html" target="_blank" rel="noopener">制作与素材说明</a></small></div>
+    </section>
+    <button id="fullscreen" type="button" disabled>全屏试玩</button>
+    <div id="warning" role="alert" hidden></div>
+  </main>
+  <script>
+    const canvas = document.getElementById('unity-canvas');
+    const warning = document.getElementById('warning');
+    const buildUrl = 'Build';
+    const config = {
+      arguments: [],
+      dataUrl: buildUrl + '/WebGL-Preview.data',
+      frameworkUrl: buildUrl + '/WebGL-Preview.framework.js',
+      codeUrl: buildUrl + '/WebGL-Preview.wasm',
+      streamingAssetsUrl: 'StreamingAssets',
+      companyName: "EasyWorld",
+      productName: "蜂行花园",
+      productVersion: "0.9.2",
+      devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+      showBanner(message, type) {
+        if (type === 'error') { console.error(message); warning.textContent = '花园遇到了一点问题，请刷新后重试。'; warning.hidden = false; }
+        else console.warn(message);
+      }
+    };
+    const loader = document.createElement('script');
+    loader.src = buildUrl + '/WebGL-Preview.loader.js';
+    function failed(message) {
+      document.getElementById('loading-text').textContent = '花园暂时没有加载成功，请刷新重试。';
+      console.error(message); warning.textContent = '请检查连接，稍后刷新页面再试一次。'; warning.hidden = false;
+    }
+    loader.onerror = () => failed('游戏文件未能加载。');
+    loader.onload = () => createUnityInstance(canvas, config, value => {
+      document.getElementById('progress').value = value;
+    }).then(instance => {
+      document.getElementById('loading').hidden = true;
+      const button = document.getElementById('fullscreen'); button.disabled = false;
+      canvas.addEventListener('pointerdown', () => canvas.focus());
+      const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+      const fullscreenFailed = error => {
+        console.warn('全屏请求未完成', error);
+        warning.textContent = '暂时无法切换全屏，请回到游戏页面后按 F 重试；可以继续窗口游玩。';
+        warning.hidden = false;
+      };
+      const toggleFullscreen = () => {
+        if (document.hidden || !document.hasFocus()) return;
+        const target = fullscreenElement() ? document : canvas;
+        const action = fullscreenElement()
+          ? document.exitFullscreen || document.webkitExitFullscreen
+          : canvas.requestFullscreen || canvas.webkitRequestFullscreen;
+        if (!action) { fullscreenFailed('浏览器不支持全屏'); return; }
+        try { Promise.resolve(action.call(target)).catch(fullscreenFailed); }
+        catch (error) { fullscreenFailed(error); }
+      };
+      button.onclick = () => { canvas.focus(); toggleFullscreen(); };
+      window.addEventListener('keydown', event => { if (event.code === 'KeyF' && !event.repeat && document.activeElement === canvas) { event.preventDefault(); toggleFullscreen(); } });
+      const fullscreen = () => { warning.hidden = true; instance.SendMessage('Bee Garden Rules', 'OnBrowserFullscreen', fullscreenElement() ? 'fullscreen' : 'windowed'); };
+      document.addEventListener('fullscreenchange', fullscreen);
+      document.addEventListener('webkitfullscreenchange', fullscreen);
+      fullscreen();
+      const viewport = () => instance.SendMessage('Bee Garden Rules', 'OnBrowserViewport', String(canvas.clientWidth));
+      viewport(); window.addEventListener('resize', viewport);
+      const visibility = () => instance.SendMessage('Bee Garden Rules', 'OnBrowserVisibility', document.hidden || !document.hasFocus() ? 'hidden' : 'visible');
+      document.addEventListener('visibilitychange', visibility);
+      window.addEventListener('blur', visibility);
+      window.addEventListener('focus', visibility);
+    }).catch(failed);
+    document.body.appendChild(loader);
+  </script>
+</body>
+</html>

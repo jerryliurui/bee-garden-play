@@ -1,0 +1,77 @@
+{
+  "game": "Bee Garden",
+  "version": "0.9.2",
+  "release": "2026-10-19-fullscreen-rounded-font",
+  "files": [
+    {
+      "path": ".nojekyll",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "Build/WebGL-Preview.data",
+      "bytes": 37054312,
+      "sha256": "04391c57ee482a9acf7b4c587d42ee8851a2950bfdc61460395cf46a9f257f40"
+    },
+    {
+      "path": "Build/WebGL-Preview.framework.js",
+      "bytes": 476666,
+      "sha256": "c6aa09c03b7e51adca62b0ea156bdb12a70824610832cacea49eb4fc11487ac7"
+    },
+    {
+      "path": "Build/WebGL-Preview.loader.js",
+      "bytes": 26983,
+      "sha256": "6f64c679429f8a4d05f8d4a63774fef3c6d9109aaf4c6bbfc7568c31e6422605"
+    },
+    {
+      "path": "Build/WebGL-Preview.wasm",
+      "bytes": 55172708,
+      "sha256": "1a069d2525dd56351de3657506336e6272574c5953b64ec29ad9af9f994519d2"
+    },
+    {
+      "path": "GardenPlay-OFL.txt",
+      "bytes": 5296,
+      "sha256": "585cbba86a583e470198e9fa63e8fed4bcb68e73911892eb2c086dd97581bb2c"
+    },
+    {
+      "path": "GardenPlay.ttf",
+      "bytes": 111984,
+      "sha256": "d83b0786efeaaff9df7fccab75b7dc4c4666ed0986ec75135398cfbc68341c3a"
+    },
+    {
+      "path": "README.md",
+      "bytes": 922,
+      "sha256": "03a1ea5831761626d5fc10329a32522e18ae42a5e6454d13c12bae26387aeefa"
+    },
+    {
+      "path": "credits.html",
+      "bytes": 2184,
+      "sha256": "590985fa45693abdb3727e29e269864e6e57f7963962c956cc490e28a39fa333"
+    },
+    {
+      "path": "index.html",
+      "bytes": 5621,
+      "sha256": "f50bd77f1c7db8e70889419f62de86e30d1354a973f5c4c8e2560f11035215c7"
+    },
+    {
+      "path": "licenses/ChineseFont-OFL.txt",
+      "bytes": 4301,
+      "sha256": "6a73f9541c2de74158c0e7cf6b0a58ef774f5a780bf191f2d7ec9cc53efe2bf2"
+    },
+    {
+      "path": "licenses/GardenPlayFont-OFL.txt",
+      "bytes": 4398,
+      "sha256": "538078469839b4a2e7ad22bef4ebe41681a4e53749bb2a072144024f1d6d703d"
+    },
+    {
+      "path": "licenses/GardenRoundFont-OFL.txt",
+      "bytes": 5296,
+      "sha256": "585cbba86a583e470198e9fa63e8fed4bcb68e73911892eb2c086dd97581bb2c"
+    },
+    {
+      "path": "licenses/GardenStoryFont-OFL.txt",
+      "bytes": 4448,
+      "sha256": "c38b1994a5e48ac30ac7d1da7d0409fd8fd8127dfe28a13d6e787d5b1ef34a5e"
+    }
+  ]
+}
